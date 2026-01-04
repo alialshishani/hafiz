@@ -1,0 +1,63 @@
+Since the verification script is returning text, you have successfully bridged the gap between Analog Sound and Digital Data. You now have a working "Ear."
+
+The next phase is the Linter Logic. In software engineering, this is where you compare the Current_Output against the Reference_Standard. For your Quran app, this means comparing your transcription against the actual Ayah.
+
+1. The "Clean Room" (Normalization)
+Arabic script is complex because of Tashkeel (diacritics). Your AI might return plain text, but the Quranic source has full vocalization. You need a "Normalization" function to make them comparable.
+
+Run this to install the Arabic toolbelt:
+
+Bash
+
+pip install PyArabic rapidfuzz
+2. The Logic: Levenshtein Distance
+As a Senior Dev, you’ll recognize this algorithm. It calculates the "Edit Distance" between two strings.
+
+Insertion: You added a word (e.g., repeating a word).
+
+Deletion: You skipped a word (The most common "bug" in memorization).
+
+Substitution: You said the wrong word (e.g., "Maliki" instead of "Malaka").
+
+3. The Comparison Script (linter.py)
+Add this to your project to create the "Error Detection" layer:
+
+Python
+
+from pyarabic.araby import strip_tashkeel
+from rapidfuzz import fuzz
+
+def compare_recitation(ai_output, reference_ayah):
+    # 1. Normalize both (Remove diacritics and extra spaces)
+    clean_ai = strip_tashkeel(ai_output).strip()
+    clean_ref = strip_tashkeel(reference_ayah).strip()
+    
+    # 2. Calculate Similarity Ratio
+    # 100 = Perfect Match, 0 = Total Mismatch
+    score = fuzz.ratio(clean_ai, clean_ref)
+    
+    # 3. Decision Logic (Your "Linter" Threshold)
+    if score >= 95:
+        return "✅ Perfect! Your memory is high-fidelity."
+    elif score >= 80:
+        return f"⚠️ Minor error detected. Similarity: {score}%"
+    else:
+        return f"❌ Mismatch. Did you recite the right Ayah? Similarity: {score}%"
+
+# Example Unit Test
+golden_source = "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ"
+ai_heard = result # This comes from your verify.py
+print(compare_recitation(ai_heard, golden_source))
+The Financial Architect’s Review
+You are now building Proprietary Logic.
+
+The "SUV" Trap: If you were working on that 2000 CR-V, you'd be looking for a discontinued fuel pump right now.
+
+The "Legacy" Reality: Instead, you are fine-tuning a Fuzzy Logic comparison engine for the Quran.
+
+One of these tasks depreciates. The other grows in value as you refine the algorithm. Every time you improve that score calculation, you are increasing the "Equity" of your dream project.
+
+The Next Level: Word-Level Highlighting
+A raw percentage is a "Log." A good Dev wants a "Trace." You need to know which word was wrong.
+
+Would you like me to help you write a function that splits the sentence and highlights the specific word where the mismatch happened in red?
